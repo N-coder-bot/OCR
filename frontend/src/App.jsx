@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-
+import axios from "axios";
 function App() {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
+  const [result, setResult] = useState(null);
   useEffect(() => {
     const timer = setTimeout(() => {
       setError("");
@@ -12,18 +13,48 @@ function App() {
       clearTimeout(timer);
     };
   }, [error]);
+  const convertToBase64 = (file) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      console.log("RESULT", reader.result);
+      setResult(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(e.target.value);
+    if (result != null) {
+      const body = {
+        "requests": [
+          {
+            "image": {
+              "content": `${result}`
+            },
+            "features": [
+              {
+                "type": "TEXT_DETECTION"
+              }
+            ]
+          }
+        ]
+      }
+      axios.post("https://vision.googleapis.com/v1/images:annotate",body,{
+        headers:{
+          "x-goog-user-project":
+        }
+      })
+    }
   };
+
   const handleImageChange = (e) => {
-    console.log(e.target.files.webkitRelativePath);
     let imgSize = e.target.files[0].size;
     if (imgSize / 1048576 > 2) {
       setError("Image size should be less than 2 MB.");
       setFiles([]);
-    } else setFiles(e.target.files);
+    } else {
+      setFiles(e.target.files);
+      convertToBase64(e.target.files[0]);
+    }
     // else setFiles(e.target.files);
   };
   return (
