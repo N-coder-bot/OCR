@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 function App() {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([]); // Storing image file.
+  const [data,setData ] = useState(null); // Storing "Base64 Encoded" string form of the image file.
+  const [token,setToken] = useState("");
   const [error, setError] = useState("");
-  const [result, setResult] = useState(null);
   useEffect(() => {
     const timer = setTimeout(() => {
       setError("");
@@ -13,36 +14,55 @@ function App() {
       clearTimeout(timer);
     };
   }, [error]);
+  // OCR Api takes base64 URL format only, below function converts file to base64.
   const convertToBase64 = (file) => {
-    const reader = new FileReader();
+    const reader = new FileReader(); // FileReader for reading file content.
     reader.onload = function () {
-      console.log("RESULT", reader.result);
-      setResult(reader.result);
+      setData(reader.result.slice(23));
     };
     reader.readAsDataURL(file);
   };
+  // Fetching token from the backend server.
+  const getToken = async() => {
+    const response = await axios.get("http://localhost:3000/user/getAccessToken");
+    setToken(response.data.accessToken.token);
+  }
+  // Google Cloud Vision Api called, with the provided user id image.
+  const getResponse = async (body) => {
+    getToken();
+    const response = await axios.post(
+      "https://vision.googleapis.com/v1/images:annotate",
+      body,
+      {
+        headers: {
+          Authorization:
+          `Bearer ${token}`,
+          "x-goog-user-project": `${import.meta.env.VITE_PRODUCT_ID}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      }
+    );
+    console.log(response);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (result != null) {
-      const body = {
+    if (data != null) {
+      // console.log("DATA",data);
+      const body = {// This is one of the required parameters to the POST method.
         "requests": [
           {
             "image": {
-              "content": `${result}`
+              "content": `${data}`,
             },
             "features": [
               {
-                "type": "TEXT_DETECTION"
-              }
-            ]
-          }
-        ]
-      }
-      axios.post("https://vision.googleapis.com/v1/images:annotate",body,{
-        headers:{
-          "x-goog-user-project":
-        }
-      })
+                "type": "TEXT_DETECTION",
+              },
+            ],
+          },
+        ],
+      };
+      getResponse(body);
     }
   };
 
