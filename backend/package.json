@@ -1,0 +1,14 @@
+{
+  "name": "ocr-backend",
+  "version": "1.0.0",
+  "description": "backend application OCR",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js"
+  },
+  "author": "Naman Jain",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
