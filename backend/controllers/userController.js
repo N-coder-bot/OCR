@@ -1,7 +1,7 @@
 const User = require("../models/User");
 
 const { GoogleAuth } = require("google-auth-library"); // Google library for Auth, via REST.
-// Controller for getting Access Token inorder to use Google Cloud Vision API.
+// Getting Access Token inorder to use Google Cloud Vision API.
 const getAccessToken = async (req, res) => {
   const auth = new GoogleAuth({
     keyFile: `./${process.env.SECRET_KEY_PATH}`, // Service account key file, stores info about public/private key.
@@ -14,7 +14,7 @@ const getAccessToken = async (req, res) => {
   // Return the access token to the client.
   res.json({ accessToken });
 };
-// Controller for creating an OCR record, from the data received.
+// Creating an OCR record, from the data received.
 const createOcrRecord = async (req, res) => {
   try {
     const record = req.body;
@@ -42,10 +42,17 @@ const createOcrRecord = async (req, res) => {
     }
     record.status = status;
     record.timestamp = new Date();
-    await User.create(record);
-    res.json({ success: "success!" });
+    let user = await User.create(record);
+    res.json({ user: user });
   } catch (error) {
     res.status(400).json({ error: "server error" });
   }
 };
-module.exports = { getAccessToken, createOcrRecord };
+
+// Edit the record.
+const editOcrRecord = async (req, res) => {
+  let updatedRecord = req.body;
+  await User.findByIdAndUpdate(updatedRecord._id, updatedRecord);
+  res.json({ success: "success" });
+};
+module.exports = { getAccessToken, createOcrRecord, editOcrRecord };
