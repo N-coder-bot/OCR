@@ -40,8 +40,11 @@ function App() {
         ],
       };
       let newRecord = await getResponseFromApi(body); // Custom Api call to the google cloud vision api.
-      await axios.post("http://localhost:3000/user/createRecord", newRecord); // Create record in the database.
-      setResults([...results, newRecord]);
+      let response = await axios.post(
+        "http://localhost:3000/user/createRecord",
+        newRecord
+      ); // Create record in the database.
+      setResults([...results, response.data.user]);
     }
   };
   const handleImageChange = (e) => {
