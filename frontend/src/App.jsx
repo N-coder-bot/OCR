@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Result from "./components/Result";
 import { getResponseFromApi } from "./utils/getResponseFromApi";
 import { convertToBase64 } from "./utils/convertToBase64";
+
+import axios from "axios";
 function App() {
   const [files, setFiles] = useState([]); // Storing image file.
   const [data, setData] = useState(null); // Storing "Base64 Encoded" string form of the image file.
@@ -38,6 +40,7 @@ function App() {
         ],
       };
       let newRecord = await getResponseFromApi(body); // Custom Api call to the google cloud vision api.
+      await axios.post("http://localhost:3000/user/createRecord", newRecord); // Create record in the database.
       setResults([...results, newRecord]);
     }
   };
