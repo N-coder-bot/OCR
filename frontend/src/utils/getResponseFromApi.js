@@ -34,13 +34,32 @@ export const getResponseFromApi = async (body) => {
   // 5. Date of Expiry.
   const dateOfExpiryRegex = /(\d{2}\s[A-Za-z]+\.\s\d{4})\nDate of Expiry\n/;
 
+  // Setting details.
+  let identification_number = text.match(identificationNumberRegex)?.[1];
+  let name = text.match(nameRegex)?.slice(1)[0] || [];
+  let last_name = text.match(lastnameRegex)?.slice(1)[0] || [];
+  let date_of_birth = text.match(dateOfBirthRegex)?.[1];
+  let date_of_issue = text.match(dateOfIssueRegex)?.[1];
+  let date_of_expiry = text.match(dateOfExpiryRegex)?.[1];
+
   let newDetail = {
-    identification_number: text.match(identificationNumberRegex)?.[1],
-    name: text.match(nameRegex)?.slice(1)[0] || [],
-    last_name: text.match(lastnameRegex)?.slice(1)[0] || [],
-    date_of_birth: text.match(dateOfBirthRegex)?.[1],
-    date_of_issue: text.match(dateOfIssueRegex)?.[1],
-    date_of_expiry: text.match(dateOfExpiryRegex)?.[1],
+    identification_number,
+    name,
+    last_name,
+    date_of_birth,
+    date_of_issue,
+    date_of_expiry,
   };
+  // checking whether the query was success or not.
+  if (
+    identification_number == undefined ||
+    name == undefined ||
+    last_name == undefined ||
+    date_of_birth == undefined ||
+    date_of_expiry == undefined ||
+    date_of_issue == undefined
+  ) {
+    newDetail.status = "failed";
+  } else newDetail.status = "successful";
   return newDetail;
 };
