@@ -18,7 +18,8 @@ function App() {
   const convertToBase64 = (file) => {
     const reader = new FileReader(); // FileReader for reading file content.
     reader.onload = function () {
-      setData(reader.result.slice(23));
+      // console.log(reader.result);
+      setData(reader.result.replace(/data:image\/(jpeg|png|jpg);base64,/,"")); //Regex to parse data correctly.
     };
     reader.readAsDataURL(file);
   };
@@ -47,7 +48,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (data != null) {
-      // console.log("DATA",data);
+      console.log("DATA",data);
       const body = {// This is one of the required parameters to the POST method.
         "requests": [
           {
