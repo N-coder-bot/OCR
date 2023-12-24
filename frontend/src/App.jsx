@@ -53,8 +53,8 @@ function App() {
     // else setFiles(e.target.files);
   };
   return (
-    <div className="h-screen bg-slate-100">
-      <div className="flex flex-col justify-around border-2 h-28">
+    <div className="bg-slate-100">
+      <div className="flex flex-col justify-around h-28">
         <div className="text-center text-3xl text-black font-medium pt-5">
           Optical Character Recognition
         </div>
@@ -62,14 +62,18 @@ function App() {
           The application scans an id and gives the JSON format data.
         </div>
       </div>
-      <div className="p-10 w-200 flex justify-center font-mono bg-white drop-shadow-md h-2/4">
+      <div className="p-10 flex justify-center font-mono bg-white drop-shadow-md">
         {files.length != 0 ? (
-          <img src={`${URL.createObjectURL(files[0])}`} alt="" />
+          <img
+            src={`${URL.createObjectURL(files[0])}`}
+            alt=""
+            className=" w-64"
+          />
         ) : (
           <></>
         )}
         <form
-          className="flex flex-col h-full justify-around px-5"
+          className="flex flex-col justify-around px-5"
           onSubmit={handleSubmit}
         >
           <input
