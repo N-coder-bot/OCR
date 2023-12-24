@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Result from "./components/Result";
 function App() {
   const [files, setFiles] = useState([]); // Storing image file.
-  const [data,setData ] = useState(null); // Storing "Base64 Encoded" string form of the image file.
-  const [token,setToken] = useState("");
+  const [data, setData] = useState(null); // Storing "Base64 Encoded" string form of the image file.
+  const [token, setToken] = useState("");
   const [error, setError] = useState("");
+  const [results, setResults] = useState([]); // Store json results.
   useEffect(() => {
     const timer = setTimeout(() => {
       setError("");
@@ -19,15 +21,17 @@ function App() {
     const reader = new FileReader(); // FileReader for reading file content.
     reader.onload = function () {
       // console.log(reader.result);
-      setData(reader.result.replace(/data:image\/(jpeg|png|jpg);base64,/,"")); //Regex to parse data correctly.
+      setData(reader.result.replace(/data:image\/(jpeg|png|jpg);base64,/, "")); //Regex to parse data correctly.
     };
     reader.readAsDataURL(file);
   };
   // Fetching token from the backend server.
-  const getToken = async() => {
-    const response = await axios.get("http://localhost:3000/user/getAccessToken");
+  const getToken = async () => {
+    const response = await axios.get(
+      "http://localhost:3000/user/getAccessToken"
+    );
     setToken(response.data.accessToken.token);
-  }
+  };
   // Google Cloud Vision Api called, with the provided user id image.
   const getResponse = async (body) => {
     getToken();
@@ -36,28 +40,56 @@ function App() {
       body,
       {
         headers: {
-          Authorization:
-          `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "x-goog-user-project": `${import.meta.env.VITE_PRODUCT_ID}`,
           "Content-Type": "application/json; charset=utf-8",
         },
       }
     );
-    console.log(response);
+
+    let text = response.data.responses[0].fullTextAnnotation.text;
+    // console.log(text);
+
+    // Identification Number.
+    const identificationNumberRegex = /(\d{1,2}\s\d{4}\s\d{5}\s\d{2}\s\d)/;
+
+    // Name regexes.
+    const nameRegex = /Name\s(.+?)\n/;
+    const lastnameRegex = /Last\sname\s(.+?)\n/;
+
+    // Date of Birth
+    const dateOfBirthRegex = /Date of Birth (\d{2}\s[A-Za-z]+\.\s\d{4})/;
+
+    // Date of Issue
+    const dateOfIssueRegex = /(\d{2}\s[A-Za-z]+\.\s\d{4})\nDate of Issue\n/;
+
+    // Date of Expiry.
+    const dateOfExpiryRegex = /(\d{2}\s[A-Za-z]+\.\s\d{4})\nDate of Expiry\n/;
+
+    let newDetail = {
+      identification_number: text.match(identificationNumberRegex)?.[1],
+      name: text.match(nameRegex)?.slice(1)[0] || [],
+      last_name: text.match(lastnameRegex)?.slice(1)[0] || [],
+      date_of_birth: text.match(dateOfBirthRegex)?.[1],
+      date_of_issue: text.match(dateOfIssueRegex)?.[1],
+      date_of_expiry: text.match(dateOfExpiryRegex)?.[1],
+    };
+    setResults([...results, newDetail]);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (data != null) {
-      console.log("DATA",data);
-      const body = {// This is one of the required parameters to the POST method.
-        "requests": [
+      // console.log("DATA",data);
+      const body = {
+        // This is one of the required parameters to the POST method.
+        requests: [
           {
-            "image": {
-              "content": `${data}`,
+            image: {
+              content: `${data}`,
             },
-            "features": [
+            features: [
               {
-                "type": "TEXT_DETECTION",
+                type: "TEXT_DETECTION",
               },
             ],
           },
@@ -121,7 +153,7 @@ function App() {
           )}
         </form>
       </div>
-      <div className="flex justify-center">Results</div>
+      <Result results={results} />
     </div>
   );
 }
