@@ -8,7 +8,7 @@ const userSchema = new Schema({
   date_of_birth: { type: String },
   date_of_issue: { type: String },
   date_of_expiry: { type: String },
-  status: { type: Boolean }, // Whether the OCR process was success or not.
+  status: { type: String }, // Whether the OCR process was success or failure.
   error: { type: String }, // Error message, if any.
   timestamp: { type: Date, default: Date.now }, // time at which record was created.
 });
