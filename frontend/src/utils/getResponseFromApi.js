@@ -60,6 +60,6 @@ export const getResponseFromApi = async (body) => {
     date_of_issue == undefined
   ) {
     newDetail.status = "failed";
-  } else newDetail.status = "successful";
+  } else newDetail.status = "success";
   return newDetail;
 };
