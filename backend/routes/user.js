@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   getAccessToken,
   createOcrRecord,
+  editOcrRecord,
 } = require("../controllers/userController");
 
 // Route to get access token for the user.
@@ -11,4 +12,6 @@ const {
 router.get("/getAccessToken", getAccessToken);
 // Route to create ocr record.
 router.post("/createRecord", createOcrRecord);
+//Route to edit ocr record.
+router.put("/editRecord", editOcrRecord);
 module.exports = router;
