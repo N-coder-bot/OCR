@@ -15,6 +15,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+app.use(express.json()); // For allowing body parsing.
 
 const userRouters = require("./routes/user");
 app.use("/user", userRouters); // using user routes.
