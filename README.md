@@ -47,3 +47,5 @@ uri =  <mongodb_uri_connect_comes_here>
 # Live Working
 
 > https://ocr-nine-sable.vercel.app/
+
+note- The backend is deployed on Free tier of Render, so may take time to respond, kindly wait.
