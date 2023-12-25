@@ -18,7 +18,10 @@ app.use(cors(corsOptions));
 app.use(express.json()); // For allowing body parsing.
 
 const userRouters = require("./routes/user");
+const operationRouters = require("./routes/operation");
+
 app.use("/user", userRouters); // using user routes.
+app.use("/operation", operationRouters); // using operation routes.
 
 app.listen(PORT, () => {
   console.log("listening on port 3000");
