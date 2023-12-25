@@ -4,6 +4,7 @@ import { getResponseFromApi } from "./utils/getResponseFromApi";
 import { convertToBase64 } from "./utils/convertToBase64";
 
 import axios from "axios";
+import OperationList from "./components/OperationList";
 function App() {
   const [files, setFiles] = useState([]); // Storing image file.
   const [data, setData] = useState(null); // Storing "Base64 Encoded" string form of the image file.
@@ -19,6 +20,16 @@ function App() {
       clearTimeout(timer);
     };
   }, [error]);
+  // Effect for fetching all the records.
+  useEffect(() => {
+    const getRecords = async () => {
+      let response = await axios.get(
+        "http://localhost:3000/user/getAllRecords"
+      );
+      setResults(response.data.records);
+    };
+    getRecords();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,7 +116,10 @@ function App() {
           )}
         </form>
       </div>
-      <Result results={results} />
+      <div className="flex justify-center">
+        <Result results={results} />
+        <OperationList />
+      </div>
     </div>
   );
 }
