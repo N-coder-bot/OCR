@@ -11,7 +11,7 @@ const PORT = 3000; //localhost for now.
 
 const corsOptions = {
   // cross origin allowed.
-  origin: ["http://localhost:5173"],
+  origin: ["http://localhost:5173", "https://ocr-nine-sable.vercel.app"],
   credentials: true,
 };
 app.use(cors(corsOptions));
