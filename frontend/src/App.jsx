@@ -15,6 +15,7 @@ function App() {
   const [ops, setOps] = useState([]); // Stored success/failed operations.
   const [loadingRecords, setLoadingRecords] = useState(true); // Loading records...
   const [loadingOperations, setLoadingOperations] = useState(true); // Loading operations...
+  const [filter, setFilter] = useState(0); // filter option for retrieving specific records.
   // Handling error message.
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -30,13 +31,13 @@ function App() {
   useEffect(() => {
     setLoadingRecords(true);
     const getRecords = async () => {
-      let response = await axios.get(`${origin}/user/getAllRecords`);
+      let response = await axios.get(`${origin}/user/getAllRecords/${filter}`);
       // console.log(response.data);
       setResults(response.data.records); // setting for storing records.
       setLoadingRecords(false);
     };
     getRecords();
-  }, []);
+  }, [filter]);
 
   // Effect for fetching all the operations.
   useEffect(() => {
@@ -146,7 +147,13 @@ function App() {
         {loadingRecords ? (
           <Loader />
         ) : (
-          <Result results={results} setOps={setOps} ops={ops} />
+          <Result
+            results={results}
+            setOps={setOps}
+            ops={ops}
+            setFilter={setFilter}
+            filter={filter}
+          />
         )}
         {loadingOperations ? <Loader /> : <OperationList ops={ops} />}
       </div>
