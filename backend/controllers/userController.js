@@ -55,4 +55,15 @@ const editOcrRecord = async (req, res) => {
   await User.findByIdAndUpdate(updatedRecord._id, updatedRecord);
   res.json({ success: "success" });
 };
-module.exports = { getAccessToken, createOcrRecord, editOcrRecord };
+
+// Fetch all the records.
+const getAllOcrRecords = async (req, res) => {
+  let records = await User.find({}).sort({ createdAt: "asc" });
+  res.json({ records });
+};
+module.exports = {
+  getAccessToken,
+  createOcrRecord,
+  editOcrRecord,
+  getAllOcrRecords,
+};
