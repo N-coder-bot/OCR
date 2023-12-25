@@ -186,6 +186,10 @@ function ResultCard({ result, setOps, ops }) {
                   <input
                     type="date"
                     name="birth"
+                    value={`${dob.slice(6)}-${dob.slice(3, 5)}-${dob.slice(
+                      0,
+                      2
+                    )}`}
                     placeholder={dob}
                     className=" px-1 rounded-sm outline-none"
                     onChange={handleDobChange}
@@ -198,6 +202,10 @@ function ResultCard({ result, setOps, ops }) {
                   <input
                     type="date"
                     name="issue"
+                    value={`${issue.slice(6)}-${issue.slice(
+                      3,
+                      5
+                    )}-${issue.slice(0, 2)}`}
                     placeholder={issue}
                     onChange={handleIssueChange}
                     className=" px-1 rounded-sm outline-none"
@@ -210,6 +218,10 @@ function ResultCard({ result, setOps, ops }) {
                   <input
                     type="date"
                     name="expiry"
+                    value={`${expiry.slice(6)}-${expiry.slice(
+                      3,
+                      5
+                    )}-${expiry.slice(0, 2)}`}
                     placeholder={expiry}
                     onChange={handleExpiryChange}
                     className=" px-1 rounded-sm outline-none"
