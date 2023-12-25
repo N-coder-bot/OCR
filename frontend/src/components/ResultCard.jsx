@@ -47,31 +47,28 @@ function ResultCard({ result }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    let x = status;
     // None of the values can be empty when editing the values, if they are that OCR is a failed operation.
     if (!inputValue || !name || !dob || !issue || !expiry || !lastName) {
       setStatus("failed");
+      x = "failed";
     } else {
       setStatus("success");
+      x = "success";
     }
     try {
       // Make axios put request.
-      const response = await axios.put(
-        "http://localhost:3000/user/editRecord",
-        {
-          _id: result._id,
-          identification_number: inputValue,
-          name: name,
-          last_name: lastName,
-          date_of_birth: dob,
-          date_of_issue: issue,
-          date_of_expiry: expiry,
-          status: status,
-        }
-      );
-
-      console.log("Record edited successfully:", response.data);
-      // Reset error state
+      await axios.put("http://localhost:3000/user/editRecord", {
+        _id: result._id,
+        identification_number: inputValue,
+        name: name,
+        last_name: lastName,
+        date_of_birth: dob,
+        date_of_issue: issue,
+        date_of_expiry: expiry,
+        status: x,
+      });
+      setEdit(!edit);
       setError("");
     } catch (error) {
       console.error("Error editing record:", error.message);
@@ -110,6 +107,7 @@ function ResultCard({ result }) {
           </li>
         </ul>
       ) : (
+        // Displaying Edit form, when edit button is clicked.
         <div className="h-full">
           <form
             className="flex flex-col justify-between h-full"
@@ -201,7 +199,7 @@ function ResultCard({ result }) {
       )}
       {error && <div className="text-red-600">{error}</div>}
       <button
-        className="absolute bottom-2 right-5 bg-blue-100 rounded-sm w-12 text-slate-400 hover:text-white hover:bg-blue-600 duration-300"
+        className="absolute bottom-2 right-5 bg-blue-100 rounded-sm w-16 px-1 text-slate-400 hover:text-white hover:bg-blue-600 duration-300"
         onClick={() => setEdit(!edit)}
       >
         {edit ? "Cancel" : "Edit"}
