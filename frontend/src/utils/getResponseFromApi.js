@@ -26,13 +26,13 @@ export const getResponseFromApi = async (body) => {
   const lastnameRegex = /Last\sname\s(.+?)\n/;
 
   // 3. Date of Birth
-  const dateOfBirthRegex = /Date of Birth (\d{1,2}\s[A-Za-z]+\.\s\d{4})/i;
+  const dateOfBirthRegex = /Date of Birth (\d{1,2}\s[A-Za-z]+\.?\s\d{4})/i;
 
   // 4. Date of Issue
-  const dateOfIssueRegex = /(\d{1,2}\s[A-Za-z]+\.\s\d{4})\nDate of Issue/i;
+  const dateOfIssueRegex = /(\d{1,2}\s[A-Za-z]+\.?\s\d{4})\nDate of Issue/i;
 
   // 5. Date of Expiry.
-  const dateOfExpiryRegex = /(\d{1,2}\s[A-Za-z]+\.\s\d{4})\nDate of Expiry/i;
+  const dateOfExpiryRegex = /(\d{1,2}\s[A-Za-z]+\.?\s\d{4})\nDate of Expiry/i;
 
   // Setting details.
   let identification_number = text.match(identificationNumberRegex)?.[1];
