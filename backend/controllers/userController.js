@@ -61,9 +61,16 @@ const getAllOcrRecords = async (req, res) => {
   let records = await User.find({}).sort({ createdAt: "asc" });
   res.json({ records });
 };
+
+// Delete a record.
+const deleteOcrRecord = async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.send("success");
+};
 module.exports = {
   getAccessToken,
   createOcrRecord,
   editOcrRecord,
   getAllOcrRecords,
+  deleteOcrRecord,
 };
