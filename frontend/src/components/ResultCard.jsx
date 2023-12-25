@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import axios from "axios";
-function ResultCard({ result }) {
+function ResultCard({ result, setOps, ops }) {
   const [edit, setEdit] = useState(false);
   const [inputValue, setInputValue] = useState(result.identification_number);
   const [name, setName] = useState(result.name);
@@ -68,6 +68,15 @@ function ResultCard({ result }) {
         date_of_expiry: expiry,
         status: x,
       });
+      // Since updation of the detail is another operation, we call create operation api here.
+      let Opresponse = await axios.post(
+        "http://localhost:3000/operation/createOp",
+        {
+          id: result._id,
+          status: x,
+        }
+      );
+      setOps([...ops, Opresponse.data.op]);
       setEdit(!edit);
       setError("");
     } catch (error) {

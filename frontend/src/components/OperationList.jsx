@@ -2,14 +2,13 @@
 import React from "react";
 
 function OperationList({ ops }) {
-  console.log(ops);
   return (
     <div className="flex flex-col m-7">
       <div className="text-2xl font-serif">LIST OF OPERATIONS</div>
-      {ops.map((op) => {
+      {ops.map((op, index) => {
         return (
           <ul
-            key={op.id}
+            key={index}
             className={`flex flex-row w-58 justify-between font-mono font-semibold  p-2 border-t border-black mt-5 gap-10`}
           >
             <li>{`${op.id}`}</li>
