@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { origin } from "../utils/origin";
+import Loader from "./Loader";
 function ResultCard({ result, setOps, ops }) {
   const [edit, setEdit] = useState(false);
   const [inputValue, setInputValue] = useState(result.identification_number);
@@ -12,6 +13,7 @@ function ResultCard({ result, setOps, ops }) {
   const [expiry, setExpiry] = useState(result.date_of_expiry);
   const [status, setStatus] = useState(result.status);
   const [error, setError] = useState("");
+  const [loadingRecord, setLoadingRecord] = useState(false);
 
   const handleInputChange = (e) => {
     let value = e.target.value;
@@ -59,6 +61,7 @@ function ResultCard({ result, setOps, ops }) {
     }
     try {
       // Make axios put request.
+      setLoadingRecord(true);
       await axios.put(`${origin}/user/editRecord`, {
         _id: result._id,
         identification_number: inputValue,
@@ -69,6 +72,7 @@ function ResultCard({ result, setOps, ops }) {
         date_of_expiry: expiry,
         status: x,
       });
+      setLoadingRecord(false);
       // Since updation of the detail is another operation, we call create operation api here.
       let Opresponse = await axios.post(`${origin}/operation/createOp`, {
         id: result._id,
@@ -84,7 +88,9 @@ function ResultCard({ result, setOps, ops }) {
   };
   return (
     <div className=" relative bg-blue-300 p-5 m-5 rounded-md font-mono font-semibold h-64 drop-shadow-lg">
-      {!edit ? (
+      {loadingRecord ? (
+        <Loader />
+      ) : !edit ? (
         <ul className="flex flex-col justify-between h-full">
           <li>
             {`"Identification Number"`}:{`"${inputValue}"`},
