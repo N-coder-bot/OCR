@@ -26,18 +26,18 @@ export const getResponseFromApi = async (body) => {
   const lastnameRegex = /Last\sname\s(.+?)\n/;
 
   // 3. Date of Birth
-  const dateOfBirthRegex = /Date of Birth (\d{2}\s[A-Za-z]+\.\s\d{4})/;
+  const dateOfBirthRegex = /Date of Birth (\d{1,2}\s[A-Za-z]+\.\s\d{4})/i;
 
   // 4. Date of Issue
-  const dateOfIssueRegex = /(\d{2}\s[A-Za-z]+\.\s\d{4})\nDate of Issue\n/;
+  const dateOfIssueRegex = /(\d{1,2}\s[A-Za-z]+\.\s\d{4})\nDate of Issue/i;
 
   // 5. Date of Expiry.
-  const dateOfExpiryRegex = /(\d{2}\s[A-Za-z]+\.\s\d{4})\nDate of Expiry\n/;
+  const dateOfExpiryRegex = /(\d{1,2}\s[A-Za-z]+\.\s\d{4})\nDate of Expiry/i;
 
   // Setting details.
   let identification_number = text.match(identificationNumberRegex)?.[1];
-  let name = text.match(nameRegex)?.slice(1)[0] || [];
-  let last_name = text.match(lastnameRegex)?.slice(1)[0] || [];
+  let name = text.match(nameRegex)?.slice(1)[0] || undefined;
+  let last_name = text.match(lastnameRegex)?.slice(1)[0] || undefined;
   let date_of_birth = text.match(dateOfBirthRegex)?.[1];
   let date_of_issue = text.match(dateOfIssueRegex)?.[1];
   let date_of_expiry = text.match(dateOfExpiryRegex)?.[1];
