@@ -6,6 +6,7 @@ const {
   createOcrRecord,
   editOcrRecord,
   getAllOcrRecords,
+  deleteOcrRecord,
 } = require("../controllers/userController");
 
 // Route to get access token for the user.
@@ -17,4 +18,6 @@ router.post("/createRecord", createOcrRecord);
 router.put("/editRecord", editOcrRecord);
 // Route to get all the ocr records.
 router.get("/getAllRecords", getAllOcrRecords);
+// Route to delete a record.(soft or permanent depends on query)
+router.delete("/deleteRecord/:id", deleteOcrRecord);
 module.exports = router;
