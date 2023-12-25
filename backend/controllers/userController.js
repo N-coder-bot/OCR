@@ -56,9 +56,26 @@ const editOcrRecord = async (req, res) => {
   res.json({ success: "success" });
 };
 
-// Fetch all the records.
+// Fetch all the records. 0-> all records, 1-> success records only, 2-> failed records only., 3-> timestamp asc.
 const getAllOcrRecords = async (req, res) => {
-  let records = await User.find({}).sort({ createdAt: "asc" });
+  let filter = req.params.filter;
+  let records;
+  if (filter == 0)
+    records = await User.find({}).sort({
+      createdAt: "asc",
+    });
+  // fetch all records.
+  else if (filter == 1)
+    records = await User.find({ status: "success" }).sort({
+      createdAt: "asc",
+    });
+  // success records only.
+  else if (filter == 2)
+    records = await User.find({ status: "failed" }).sort({
+      createdAt: "asc",
+    });
+  // failed records only.
+  else records = await User.find({}).sort({ createdAt: "desc" }); // last record first.
   res.json({ records });
 };
 

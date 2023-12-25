@@ -17,7 +17,7 @@ router.post("/createRecord", createOcrRecord);
 //Route to edit ocr record.
 router.put("/editRecord", editOcrRecord);
 // Route to get all the ocr records.
-router.get("/getAllRecords", getAllOcrRecords);
+router.get("/getAllRecords/:filter", getAllOcrRecords);
 // Route to delete a record.(soft or permanent depends on query)
 router.delete("/deleteRecord/:id", deleteOcrRecord);
 module.exports = router;
