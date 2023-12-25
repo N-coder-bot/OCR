@@ -38,16 +38,16 @@ function ResultCard({ result, setOps, ops }) {
     setLastName(value);
   };
   const handleDobChange = (e) => {
-    let value = e.target.value;
-    setDob(value);
+    let value = e.target.value.split("-");
+    setDob(value[2] + "/" + value[1] + "/" + value[0]);
   };
   const handleIssueChange = (e) => {
-    let value = e.target.value;
-    setIssue(value);
+    let value = e.target.value.split("-");
+    setIssue(value[2] + "/" + value[1] + "/" + value[0]);
   };
   const handleExpiryChange = (e) => {
-    let value = e.target.value;
-    setExpiry(value);
+    let value = e.target.value.split("-");
+    setExpiry(value[2] + "/" + value[1] + "/" + value[0]);
   };
   const handleDelete = async () => {
     setLoadingRecord(true);
