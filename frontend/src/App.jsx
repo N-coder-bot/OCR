@@ -10,6 +10,8 @@ function App() {
   const [data, setData] = useState(null); // Storing "Base64 Encoded" string form of the image file.
   const [error, setError] = useState("");
   const [results, setResults] = useState([]); // Store json results.
+  const [ops, setOps] = useState([]); // Stored success/failed operations.
+
   // Handling error message.
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -20,15 +22,26 @@ function App() {
       clearTimeout(timer);
     };
   }, [error]);
+
   // Effect for fetching all the records.
   useEffect(() => {
     const getRecords = async () => {
       let response = await axios.get(
         "http://localhost:3000/user/getAllRecords"
       );
-      setResults(response.data.records);
+      // console.log(response.data);
+      setResults(response.data.records); // setting for storing records.
     };
     getRecords();
+  }, []);
+
+  // Effect for fetching all the operations.
+  useEffect(() => {
+    const getOps = async () => {
+      let response = await axios.get("http://localhost:3000/operation/getOps");
+      setOps(response.data.ops); // setting for storing operations.
+    };
+    getOps();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -51,11 +64,22 @@ function App() {
         ],
       };
       let newRecord = await getResponseFromApi(body); // Custom Api call to the google cloud vision api.
-      let response = await axios.post(
+      let RecordResponse = await axios.post(
         "http://localhost:3000/user/createRecord",
         newRecord
       ); // Create record in the database.
-      setResults([...results, response.data.user]);
+      setResults([...results, RecordResponse.data.user]);
+
+      // This also is a new operation. So calling create operation api.
+      let newOp = {
+        status: RecordResponse.data.user.status,
+        id: RecordResponse.data.user._id,
+      };
+      let OpResponse = await axios.post(
+        "http://localhost:3000/operation/createOp",
+        newOp
+      );
+      setOps([...ops, OpResponse.data.op]);
     }
   };
   const handleImageChange = (e) => {
@@ -118,7 +142,7 @@ function App() {
       </div>
       <div className="flex justify-center">
         <Result results={results} />
-        <OperationList />
+        <OperationList ops={ops} />
       </div>
     </div>
   );
