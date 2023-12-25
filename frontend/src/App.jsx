@@ -141,7 +141,7 @@ function App() {
         </form>
       </div>
       <div className="flex justify-center">
-        <Result results={results} />
+        <Result results={results} setOps={setOps} ops={ops} />
         <OperationList ops={ops} />
       </div>
     </div>
