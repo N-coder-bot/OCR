@@ -14,6 +14,7 @@ function ResultCard({ result, setOps, ops }) {
   const [status, setStatus] = useState(result.status);
   const [error, setError] = useState("");
   const [loadingRecord, setLoadingRecord] = useState(false);
+  const [remove, setRemove] = useState(false);
 
   const handleInputChange = (e) => {
     let value = e.target.value;
@@ -47,6 +48,11 @@ function ResultCard({ result, setOps, ops }) {
   const handleExpiryChange = (e) => {
     let value = e.target.value;
     setExpiry(value);
+  };
+  const handleDelete = async () => {
+    setLoadingRecord(true);
+    await axios.delete(`${origin}/user/deleteRecord/${result._id}`);
+    setRemove(true);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,137 +93,149 @@ function ResultCard({ result, setOps, ops }) {
     }
   };
   return (
-    <div className=" relative bg-blue-300 p-5 m-5 rounded-md font-mono font-semibold h-64 drop-shadow-lg">
-      {loadingRecord ? (
-        <Loader />
-      ) : !edit ? (
-        <ul className="flex flex-col justify-between h-full">
-          <li>
-            {`"Identification Number"`}:{`"${inputValue}"`},
-          </li>
-          <li>
-            {`"name"`}:{`"${name}"`},
-          </li>
-          <li>
-            {`"last_name"`}:{`"${lastName}"`},
-          </li>
-          <li>
-            {`"date-of-birth"`}:{`"${dob}"`},
-          </li>
-          <li>
-            {`"date-of-issue"`}:{`"${issue}"`},
-          </li>
-          <li>
-            {`"date-of-expiry"`}:{`"${expiry}"`},
-          </li>
-          <li>
-            {`"status"`}:
-            {status == "success" ? (
-              <span className="text-green-800">SUCCESSFUL</span>
-            ) : (
-              <span className="text-red-600">FAILED</span>
-            )}
-          </li>
-        </ul>
-      ) : (
-        // Displaying Edit form, when edit button is clicked.
-        <div className="h-full">
-          <form
-            className="flex flex-col justify-between h-full"
-            onSubmit={handleSubmit}
+    <>
+      {!remove ? (
+        <div className=" relative bg-blue-300 p-5 m-5 rounded-md font-mono font-semibold h-64 drop-shadow-lg">
+          <div
+            className="absolute top-0  right-0 m-1  hover:cursor-pointer "
+            onClick={handleDelete}
           >
-            <div>
-              <label htmlFor="identification_number" className=" mx-2">
-                {`"Identification Number":`}
-              </label>
-              <input
-                type="text"
-                name="identification_number"
-                placeholder={inputValue}
-                value={inputValue}
-                onChange={handleInputChange}
-                className=" px-1 rounded-sm outline-none"
-              />
+            ❌
+          </div>
+          {loadingRecord ? (
+            <Loader />
+          ) : !edit ? (
+            <ul className="flex flex-col justify-between h-full">
+              <li>
+                {`"Identification Number"`}:{`"${inputValue}"`},
+              </li>
+              <li>
+                {`"name"`}:{`"${name}"`},
+              </li>
+              <li>
+                {`"last_name"`}:{`"${lastName}"`},
+              </li>
+              <li>
+                {`"date-of-birth"`}:{`"${dob}"`},
+              </li>
+              <li>
+                {`"date-of-issue"`}:{`"${issue}"`},
+              </li>
+              <li>
+                {`"date-of-expiry"`}:{`"${expiry}"`},
+              </li>
+              <li>
+                {`"status"`}:
+                {status == "success" ? (
+                  <span className="text-green-800">SUCCESSFUL</span>
+                ) : (
+                  <span className="text-red-600">FAILED</span>
+                )}
+              </li>
+            </ul>
+          ) : (
+            // Displaying Edit form, when edit button is clicked.
+            <div className="h-full">
+              <form
+                className="flex flex-col justify-between h-full"
+                onSubmit={handleSubmit}
+              >
+                <div>
+                  <label htmlFor="identification_number" className=" mx-2">
+                    {`"Identification Number":`}
+                  </label>
+                  <input
+                    type="text"
+                    name="identification_number"
+                    placeholder={inputValue}
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    className=" px-1 rounded-sm outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="name" className=" mx-2">
+                    {`"name":`}
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder={name}
+                    value={name}
+                    onChange={handleNameChange}
+                    className=" px-1 rounded-sm outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastname" className=" mx-2">
+                    {`"last_name":`}
+                  </label>
+                  <input
+                    type="text"
+                    name="lastname"
+                    placeholder={lastName}
+                    value={lastName}
+                    onChange={handleLastNameChange}
+                    className=" px-1 rounded-sm outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="birth" className=" mx-2">
+                    {`"date-of-birth":`}
+                  </label>
+                  <input
+                    type="date"
+                    name="birth"
+                    placeholder={dob}
+                    className=" px-1 rounded-sm outline-none"
+                    onChange={handleDobChange}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="issue" className=" mx-2">
+                    {`"date-of-issue":`}
+                  </label>
+                  <input
+                    type="date"
+                    name="issue"
+                    placeholder={issue}
+                    onChange={handleIssueChange}
+                    className=" px-1 rounded-sm outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="expiry" className=" mx-2">
+                    {`"date-of-expiry":`}
+                  </label>
+                  <input
+                    type="date"
+                    name="expiry"
+                    placeholder={expiry}
+                    onChange={handleExpiryChange}
+                    className=" px-1 rounded-sm outline-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-blue-100 rounded-sm w-12 text-slate-400 hover:text-white hover:bg-blue-600 duration-300"
+                >
+                  Save
+                </button>
+              </form>
             </div>
-            <div>
-              <label htmlFor="name" className=" mx-2">
-                {`"name":`}
-              </label>
-              <input
-                type="text"
-                name="name"
-                placeholder={name}
-                value={name}
-                onChange={handleNameChange}
-                className=" px-1 rounded-sm outline-none"
-              />
-            </div>
-            <div>
-              <label htmlFor="lastname" className=" mx-2">
-                {`"last_name":`}
-              </label>
-              <input
-                type="text"
-                name="lastname"
-                placeholder={lastName}
-                value={lastName}
-                onChange={handleLastNameChange}
-                className=" px-1 rounded-sm outline-none"
-              />
-            </div>
-            <div>
-              <label htmlFor="birth" className=" mx-2">
-                {`"date-of-birth":`}
-              </label>
-              <input
-                type="date"
-                name="birth"
-                placeholder={dob}
-                className=" px-1 rounded-sm outline-none"
-                onChange={handleDobChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="issue" className=" mx-2">
-                {`"date-of-issue":`}
-              </label>
-              <input
-                type="date"
-                name="issue"
-                placeholder={issue}
-                onChange={handleIssueChange}
-                className=" px-1 rounded-sm outline-none"
-              />
-            </div>
-            <div>
-              <label htmlFor="expiry" className=" mx-2">
-                {`"date-of-expiry":`}
-              </label>
-              <input
-                type="date"
-                name="expiry"
-                placeholder={expiry}
-                onChange={handleExpiryChange}
-                className=" px-1 rounded-sm outline-none"
-              />
-            </div>
-            <button
-              type="submit"
-              className="bg-blue-100 rounded-sm w-12 text-slate-400 hover:text-white hover:bg-blue-600 duration-300"
-            >
-              Save
-            </button>
-          </form>
+          )}
+          {error && <div className="text-red-600">{error}</div>}
+          <button
+            className="absolute bottom-2 right-5 bg-blue-100 rounded-sm w-16 px-1 text-slate-400 hover:text-white hover:bg-blue-600 duration-300"
+            onClick={() => setEdit(!edit)}
+          >
+            {edit ? "Cancel" : "Edit"}
+          </button>
         </div>
+      ) : (
+        <></>
       )}
-      {error && <div className="text-red-600">{error}</div>}
-      <button
-        className="absolute bottom-2 right-5 bg-blue-100 rounded-sm w-16 px-1 text-slate-400 hover:text-white hover:bg-blue-600 duration-300"
-        onClick={() => setEdit(!edit)}
-      >
-        {edit ? "Cancel" : "Edit"}
-      </button>
-    </div>
+    </>
   );
 }
 
