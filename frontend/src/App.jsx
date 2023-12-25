@@ -95,7 +95,6 @@ function App() {
     }
     // else setFiles(e.target.files);
   };
-  console.log(loadingRecords);
   return (
     <div className="bg-slate-100">
       <div className="flex flex-col justify-around h-28">
@@ -143,13 +142,13 @@ function App() {
           )}
         </form>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center max-w-screen-xl mx-auto">
         {loadingRecords ? (
           <Loader />
         ) : (
           <Result results={results} setOps={setOps} ops={ops} />
         )}
-        {loadingRecords ? <Loader /> : <OperationList ops={ops} />}
+        {loadingOperations ? <Loader /> : <OperationList ops={ops} />}
       </div>
     </div>
   );

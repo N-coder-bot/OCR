@@ -3,7 +3,7 @@ import React from "react";
 
 function OperationList({ ops }) {
   return (
-    <div className="flex flex-col m-7">
+    <div className="flex flex-col m-7 w-1/2 mr-10">
       <div className="text-2xl font-serif">LIST OF OPERATIONS</div>
       {ops.map((op, index) => {
         return (
