@@ -6,13 +6,15 @@ import { origin } from "./utils/origin";
 
 import axios from "axios";
 import OperationList from "./components/OperationList";
+import Loader from "./components/Loader";
 function App() {
   const [files, setFiles] = useState([]); // Storing image file.
   const [data, setData] = useState(null); // Storing "Base64 Encoded" string form of the image file.
   const [error, setError] = useState("");
   const [results, setResults] = useState([]); // Store json results.
   const [ops, setOps] = useState([]); // Stored success/failed operations.
-
+  const [loadingRecords, setLoadingRecords] = useState(true); // Loading records...
+  const [loadingOperations, setLoadingOperations] = useState(true); // Loading operations...
   // Handling error message.
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,19 +28,23 @@ function App() {
 
   // Effect for fetching all the records.
   useEffect(() => {
+    setLoadingRecords(true);
     const getRecords = async () => {
       let response = await axios.get(`${origin}/user/getAllRecords`);
       // console.log(response.data);
       setResults(response.data.records); // setting for storing records.
+      setLoadingRecords(false);
     };
     getRecords();
   }, []);
 
   // Effect for fetching all the operations.
   useEffect(() => {
+    setLoadingOperations(true);
     const getOps = async () => {
       let response = await axios.get(`${origin}/operation/getOps`);
       setOps(response.data.ops); // setting for storing operations.
+      setLoadingOperations(false);
     };
     getOps();
   }, []);
@@ -89,6 +95,7 @@ function App() {
     }
     // else setFiles(e.target.files);
   };
+  console.log(loadingRecords);
   return (
     <div className="bg-slate-100">
       <div className="flex flex-col justify-around h-28">
@@ -137,8 +144,12 @@ function App() {
         </form>
       </div>
       <div className="flex justify-center">
-        <Result results={results} setOps={setOps} ops={ops} />
-        <OperationList ops={ops} />
+        {loadingRecords ? (
+          <Loader />
+        ) : (
+          <Result results={results} setOps={setOps} ops={ops} />
+        )}
+        {loadingRecords ? <Loader /> : <OperationList ops={ops} />}
       </div>
     </div>
   );
