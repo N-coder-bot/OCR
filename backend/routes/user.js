@@ -5,6 +5,7 @@ const {
   getAccessToken,
   createOcrRecord,
   editOcrRecord,
+  getAllOcrRecords,
 } = require("../controllers/userController");
 
 // Route to get access token for the user.
@@ -14,4 +15,6 @@ router.get("/getAccessToken", getAccessToken);
 router.post("/createRecord", createOcrRecord);
 //Route to edit ocr record.
 router.put("/editRecord", editOcrRecord);
+// Route to get all the ocr records.
+router.get("/getAllRecords", getAllOcrRecords);
 module.exports = router;
