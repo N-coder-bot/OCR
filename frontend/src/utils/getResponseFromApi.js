@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "./getAccessToken";
+import { formatDate } from "./formatDate";
 
 export const getResponseFromApi = async (body) => {
   let token = await getAccessToken(); // Fetching token from the backend server.
@@ -38,10 +39,9 @@ export const getResponseFromApi = async (body) => {
   let identification_number = text.match(identificationNumberRegex)?.[1];
   let name = text.match(nameRegex)?.slice(1)[0] || undefined;
   let last_name = text.match(lastnameRegex)?.slice(1)[0] || undefined;
-  let date_of_birth = text.match(dateOfBirthRegex)?.[1];
-  let date_of_issue = text.match(dateOfIssueRegex)?.[1];
-  let date_of_expiry = text.match(dateOfExpiryRegex)?.[1];
-
+  let date_of_birth = formatDate(text.match(dateOfBirthRegex)?.[1]);
+  let date_of_issue = formatDate(text.match(dateOfIssueRegex)?.[1]);
+  let date_of_expiry = formatDate(text.match(dateOfExpiryRegex)?.[1]);
   let newDetail = {
     identification_number,
     name,
