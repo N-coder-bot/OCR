@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Result from "./components/Result";
 import { getResponseFromApi } from "./utils/getResponseFromApi";
 import { convertToBase64 } from "./utils/convertToBase64";
+import { origin } from "./utils/origin";
 
 import axios from "axios";
 import OperationList from "./components/OperationList";
@@ -26,9 +27,7 @@ function App() {
   // Effect for fetching all the records.
   useEffect(() => {
     const getRecords = async () => {
-      let response = await axios.get(
-        "http://localhost:3000/user/getAllRecords"
-      );
+      let response = await axios.get(`${origin}/user/getAllRecords`);
       // console.log(response.data);
       setResults(response.data.records); // setting for storing records.
     };
@@ -38,7 +37,7 @@ function App() {
   // Effect for fetching all the operations.
   useEffect(() => {
     const getOps = async () => {
-      let response = await axios.get("http://localhost:3000/operation/getOps");
+      let response = await axios.get(`${origin}/operation/getOps`);
       setOps(response.data.ops); // setting for storing operations.
     };
     getOps();
@@ -65,7 +64,7 @@ function App() {
       };
       let newRecord = await getResponseFromApi(body); // Custom Api call to the google cloud vision api.
       let RecordResponse = await axios.post(
-        "http://localhost:3000/user/createRecord",
+        `${origin}/user/createRecord`,
         newRecord
       ); // Create record in the database.
       setResults([...results, RecordResponse.data.user]);
@@ -75,10 +74,7 @@ function App() {
         status: RecordResponse.data.user.status,
         id: RecordResponse.data.user._id,
       };
-      let OpResponse = await axios.post(
-        "http://localhost:3000/operation/createOp",
-        newOp
-      );
+      let OpResponse = await axios.post(`${origin}/operation/createOp`, newOp);
       setOps([...ops, OpResponse.data.op]);
     }
   };

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import axios from "axios";
+import { origin } from "../utils/origin";
 function ResultCard({ result, setOps, ops }) {
   const [edit, setEdit] = useState(false);
   const [inputValue, setInputValue] = useState(result.identification_number);
@@ -58,7 +59,7 @@ function ResultCard({ result, setOps, ops }) {
     }
     try {
       // Make axios put request.
-      await axios.put("http://localhost:3000/user/editRecord", {
+      await axios.put(`${origin}/user/editRecord`, {
         _id: result._id,
         identification_number: inputValue,
         name: name,
@@ -69,13 +70,10 @@ function ResultCard({ result, setOps, ops }) {
         status: x,
       });
       // Since updation of the detail is another operation, we call create operation api here.
-      let Opresponse = await axios.post(
-        "http://localhost:3000/operation/createOp",
-        {
-          id: result._id,
-          status: x,
-        }
-      );
+      let Opresponse = await axios.post(`${origin}/operation/createOp`, {
+        id: result._id,
+        status: x,
+      });
       setOps([...ops, Opresponse.data.op]);
       setEdit(!edit);
       setError("");
