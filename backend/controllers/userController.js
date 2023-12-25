@@ -37,7 +37,7 @@ const createOcrRecord = async (req, res) => {
       date_of_expiry == undefined ||
       date_of_issue == undefined
     ) {
-      status = "failure"; // setting status of the record to failure.
+      status = "failed"; // setting status of the record to failure.
       record.error = "Improper data entry"; // set the custom error message here.
     }
     record.status = status;
