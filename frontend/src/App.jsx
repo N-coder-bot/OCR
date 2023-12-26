@@ -99,7 +99,7 @@ function App() {
   return (
     <div className="bg-slate-100">
       <div className="flex flex-col justify-around h-28">
-        <div className="text-center text-3xl text-black font-medium pt-5">
+        <div className="text-center text-xl text-black font-medium pt-5 sm:text-3xl">
           Optical Character Recognition
         </div>
         <div className="text-center text-slate-600 font-medium pb-1">
@@ -143,7 +143,7 @@ function App() {
           )}
         </form>
       </div>
-      <div className="flex justify-center max-w-screen-xl mx-auto">
+      <div className="flex justify-center max-w-screen-xl mx-auto flex-col items-center sm:flex-row sm:items-start">
         {loadingRecords ? (
           <Loader />
         ) : (

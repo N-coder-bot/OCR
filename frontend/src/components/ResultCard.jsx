@@ -95,7 +95,7 @@ function ResultCard({ result, setOps, ops }) {
   return (
     <>
       {!remove ? (
-        <div className=" relative bg-blue-300 p-5 m-5 rounded-md font-mono font-semibold h-64 drop-shadow-lg">
+        <div className=" relative bg-blue-300 p-5 m-5 rounded-md font-mono font-semibold h-90 drop-shadow-lg sm:h-80">
           <div
             className="absolute top-0  right-0 m-1  hover:cursor-pointer "
             onClick={handleDelete}

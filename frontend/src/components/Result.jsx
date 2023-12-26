@@ -8,7 +8,7 @@ function Result({ results, setOps, ops, setFilter, filter }) {
     setFilter(e.target.value);
   };
   return (
-    <div className="flex flex-col items-center m-7 w-1/2">
+    <div className="flex flex-col items-center m-7 sm:w-1/2">
       <div className="text-2xl font-serif flex">
         <div>RESULTS</div>
         <select
