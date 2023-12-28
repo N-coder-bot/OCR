@@ -1,6 +1,12 @@
+/* eslint-disable react/prop-types */
 import styles from "./Loader.module.css";
-function Loader() {
-  return <span className={styles.loader}></span>;
+function Loader({ margin }) {
+  return (
+    <span
+      style={{ margin: `${margin}px` }}
+      className={`${styles.loader}`}
+    ></span>
+  );
 }
 
 export default Loader;

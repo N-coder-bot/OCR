@@ -13,6 +13,7 @@ function App() {
   const [error, setError] = useState("");
   const [results, setResults] = useState([]); // Store json results.
   const [ops, setOps] = useState([]); // Stored success/failed operations.
+  const [getInfoLoading, setgetInfoLoading] = useState(false); // loading for get information...
   const [loadingRecords, setLoadingRecords] = useState(true); // Loading records...
   const [loadingOperations, setLoadingOperations] = useState(true); // Loading operations...
   const [filter, setFilter] = useState(0); // filter option for retrieving specific records.
@@ -69,11 +70,13 @@ function App() {
           },
         ],
       };
+      setgetInfoLoading(true);
       let newRecord = await getResponseFromApi(body); // Custom Api call to the google cloud vision api.
       let RecordResponse = await axios.post(
         `${origin}/user/createRecord`,
         newRecord
       ); // Create record in the database.
+      setgetInfoLoading(false);
       setResults([...results, RecordResponse.data.user]);
 
       // This also is a new operation. So calling create operation api.
@@ -124,16 +127,22 @@ function App() {
             type="file"
             id="avatar"
             name="avatar"
-            accept="image/png, image/jpeg"
+            accept="image/png, image/jpeg, image/jpg"
             className=""
             onChange={handleImageChange}
           />
-          <button
-            className=" bg-indigo-500 p-2 rounded duration-200 text-white w-6/12 font-semibold hover:bg-green-500"
-            type="submit"
-          >
-            Get Information
-          </button>
+          {getInfoLoading ? (
+            <div className="w-52">
+              <Loader margin={30} />
+            </div>
+          ) : (
+            <button
+              className=" bg-indigo-500 p-2 rounded duration-200 text-white w-6/12 font-semibold hover:bg-green-500"
+              type="submit"
+            >
+              Get Information
+            </button>
+          )}
           {error != "" ? (
             <div className="bg-red-200 text-red-600 p-2 rounded-sm duration-1000 absolute">
               {error}
@@ -145,7 +154,7 @@ function App() {
       </div>
       <div className="flex justify-center max-w-screen-xl mx-auto flex-col items-center sm:flex-row sm:items-start">
         {loadingRecords ? (
-          <Loader />
+          <Loader margin={150} />
         ) : (
           <Result
             results={results}
@@ -155,7 +164,11 @@ function App() {
             filter={filter}
           />
         )}
-        {loadingOperations ? <Loader /> : <OperationList ops={ops} />}
+        {loadingOperations ? (
+          <Loader margin={150} />
+        ) : (
+          <OperationList ops={ops} />
+        )}
       </div>
     </div>
   );
